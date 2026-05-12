@@ -226,8 +226,8 @@
     <div class="hero-img">
       <div class="hero-pattern"></div>
       <div class="hero-img-text">
-        <p class="hero-img-quote">"We haven't worried about our house in the Dordogne once since Propriar took over. It's like having a trusted friend on the ground."</p>
-        <span class="hero-img-cite">— Richard & Helen T., London</span>
+        <p class="hero-img-quote">Now welcoming founding clients across the Dordogne, Lot-et-Garonne, and surrounding areas.</p>
+        <span class="hero-img-cite">— Jackson Reynolds · Founder, Propriar</span>
       </div>
     </div>
     <div class="hero-stat hero-stat-1">
@@ -472,36 +472,36 @@
           <span class="contact-link-icon">💬</span>
           <span class="contact-link-text">WhatsApp Jackson directly</span>
         </a>
-        <a href="mailto:jackson@propriar.com" class="contact-link">
+        <a href="mailto:jacksonreynolds.propriar@gmail.com" class="contact-link">
           <span class="contact-link-icon">✉️</span>
-          <span class="contact-link-text">jackson@propriar.com</span>
+          <span class="contact-link-text">jacksonreynolds.propriar@gmail.com</span>
         </a>
       </div>
     </div>
 
     <div class="lead-form fade-up delay-1">
-      <div id="formBody">
+      <form action="https://formspree.io/f/mqennoqv" method="POST" onsubmit="handleSubmit(event)">
         <div class="lead-form-title">Book a free call</div>
         <p class="lead-form-sub">We'll be in touch within 24 hours to arrange a convenient time.</p>
         <div class="form-group">
           <label class="form-label">Your name</label>
-          <input type="text" class="form-input" placeholder="First and last name" id="f-name">
+          <input type="text" class="form-input" placeholder="First and last name" name="name" required>
         </div>
         <div class="form-group">
           <label class="form-label">Email address</label>
-          <input type="email" class="form-input" placeholder="your@email.com" id="f-email">
+          <input type="email" class="form-input" placeholder="your@email.com" name="email" required>
         </div>
         <div class="form-group">
           <label class="form-label">Phone / WhatsApp</label>
-          <input type="tel" class="form-input" placeholder="+44 or +33..." id="f-phone">
+          <input type="tel" class="form-input" placeholder="+44 or +33..." name="phone">
         </div>
         <div class="form-group">
           <label class="form-label">Property location</label>
-          <input type="text" class="form-input" placeholder="e.g. Near Sarlat, Dordogne" id="f-location">
+          <input type="text" class="form-input" placeholder="e.g. Near Sarlat, Dordogne" name="location">
         </div>
         <div class="form-group">
           <label class="form-label">What do you need most?</label>
-          <select class="form-input" id="f-need">
+          <select class="form-input" name="need">
             <option value="">Select an option</option>
             <option>Key holding & emergency cover</option>
             <option>Full property management</option>
@@ -510,9 +510,9 @@
             <option>Not sure yet — just exploring</option>
           </select>
         </div>
-        <button class="form-submit" onclick="submitForm()">Request my free consultation →</button>
+        <button type="submit" class="form-submit">Request my free consultation →</button>
         <p class="form-note">Your details are shared only with Jackson Reynolds. No spam, ever.</p>
-      </div>
+      </form>
       <div class="form-success" id="formSuccess">
         <div class="form-success-icon">✦</div>
         <h4>Thank you — we'll be in touch</h4>
@@ -548,12 +548,31 @@
     setTimeout(() => el.classList.add('visible'), 150 + i * 130);
   });
 
-  function submitForm() {
-    const name = document.getElementById('f-name').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    if (!name || !email) { alert('Please enter your name and email address.'); return; }
-    document.getElementById('formBody').style.display = 'none';
-    document.getElementById('formSuccess').classList.add('visible');
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').classList.add('visible');
+      } else {
+        btn.textContent = 'Request my free consultation →';
+        btn.disabled = false;
+        alert('Something went wrong. Please try WhatsApp or email directly.');
+      }
+    } catch {
+      btn.textContent = 'Request my free consultation →';
+      btn.disabled = false;
+      alert('Something went wrong. Please try WhatsApp or email directly.');
+    }
   }
 </script>
 </body>
